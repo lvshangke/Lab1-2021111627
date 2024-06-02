@@ -1,0 +1,5 @@
+Random walk 1: to -> explore -> strange -> new -> worlds -> to -> seek -> out -> new -> worlds
+Random walk 2: to -> seek -> out -> new -> life -> and -> new -> life
+Random walk 3: to -> explore -> strange -> new -> worlds -> to -> explore
+Random walk 4: to -> seek -> out -> new -> civilizations
+Random walk 5: to -> explore -> strange -> new -> civilizations
