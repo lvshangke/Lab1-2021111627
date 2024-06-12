@@ -3,13 +3,13 @@ from collections import Counter
 import networkx as nx
 import matplotlib.pyplot as plt
 import random
-from PyQt5 import QtCore, QtGui, QtWidgets
-import time
-import threading
-import matplotlib.image as mpimg
+from PyQt5 import  QtWidgets
+
 
 count = 0
 path_random=[]
+current_node=None
+
 def read_and_process_file(file_path):
     try:
         with open(file_path, 'r', encoding='utf-8') as file:
@@ -74,18 +74,7 @@ def find_bridge_words(graph, word1, word2):
     
     return bridge_words
 
-'''def print_bridge_words(graph, word1, word2):
-    bridge_words = find_bridge_words(graph, word1, word2)
-    
-    if bridge_words is None:
-        return f"No {word1} or {word2} in the graph!"
-    elif not bridge_words:
-        return f"No bridge words from {word1} to {word2}!"
-    elif len(bridge_words) == 1:
-        return f"The bridge word from {word1} to {word2} is: {bridge_words[0]}"
-    else:
-        return f"The bridge words from {word1} to {word2} are: {', '.join(bridge_words)}"
-    '''
+
 def print_bridge_words(graph, word1, word2):
     bridge_words = find_bridge_words(graph, word1, word2)
     
@@ -147,24 +136,7 @@ def calc_shortest_paths(graph, word1, word2=None): #第二个输入可以为空
                     continue
         return "", all_paths
     
-'''def print_shortest_path(graph, word1, word2=None):
-    message, paths = calc_shortest_paths(graph, word1, word2)
-    if message:
-        return message, None
-    
-    path_lengths = []
-    if word2:
-        for i, path in enumerate(paths):
-            path_length = sum(graph[path[j]][path[j + 1]]['weight'] for j in range(len(path) - 1))
-            path_lengths.append((path, path_length))
-        return "", path_lengths
-    else:
-        for target, path in paths.items():
-            path_length = sum(graph[path[i]][path[i + 1]]['weight'] for i in range(len(path) - 1))
-            path_lengths.append((path, path_length))
-        return "", path_lengths
 
-'''
 def print_shortest_path(graph, word1, word2=None):
     message, paths = calc_shortest_paths(graph, word1, word2)
     if message:
@@ -282,28 +254,7 @@ class GraphApp(QtWidgets.QWidget):
             new_text = generate_new_text(input_text, self.graph)
             self.newTextLabel.setText(new_text)
 
-    '''def find_shortest_path(self):
-        word1 = self.word1Edit.text().strip().lower()
-        word2 = self.word2Edit.text().strip().lower()
-        if self.graph is None:
-            self.shortestPathLabel.setText("Please open a file first.")
-        else:
-            message, path_lengths = print_shortest_path(self.graph, word1, word2)
-            if message:
-                self.shortestPathLabel.setText(message)
-            else:
-                if word2:
-                    path, length = path_lengths[0]
-                    self.shortestPathLabel.setText(f"Shortest path from {word1} to {word2}: {' -> '.join(path)}, length: {length}")
-                    show_directed_graph(self.graph, highlighted_path=path)
-                else:
-                    paths_info = []
-                    for path, length in path_lengths:
-                        paths_info.append(f"{' -> '.join(path)}, length: {length}")
-                    self.shortestPathLabel.setText("Shortest paths:\n" + "\n".join(paths_info))
-                    if path_lengths:
-                        show_directed_graph(self.graph, highlighted_path=path_lengths[0][0])
-    '''
+
     def find_shortest_path(self):
         word1 = self.word1Edit.text().strip().lower()
         word2 = self.word2Edit.text().strip().lower()
@@ -371,6 +322,7 @@ class GraphApp(QtWidgets.QWidget):
         
         
         if(count==0):
+            path_random=[]
             current_node= random.choice(list(self.graph.nodes))
             path_random.append(current_node)
             count=1
